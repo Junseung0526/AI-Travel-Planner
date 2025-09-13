@@ -1,8 +1,9 @@
+//로딩 중임을 표시하는 컴포넌트
+
 import React, { useState } from 'react';
-import Header from './components/Header.jsx';
-import InputForm from './components/InputForm.jsx';
-import ItineraryDisplay from './components/ItineraryDisplay.jsx';
-import './App.css';
+import Header from './components/Header';
+import InputForm from './components/InputForm';
+import ItineraryDisplay from './components/ItineraryDisplay';
 
 function App() {
     const [itinerary, setItinerary] = useState(null);
@@ -15,7 +16,7 @@ function App() {
         setItinerary(null);
 
         try {
-            const response = await fetch(`http://localhost:3000/api/travel/plan`, {
+            const response = await fetch('http://localhost:3000/api/travel/plan', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

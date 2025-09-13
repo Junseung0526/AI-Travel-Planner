@@ -1,0 +1,15 @@
+# 의존성 및 빌드 결과
+node_modules/
+dist/
+coverage/
+
+# IDE 및 OS 관련
+.vscode/
+.idea/
+.DS_Store
+
+# 환경 변수 및 민감 정보
+.env
+
+# NestJS 관련
+.nestjs_cli_cache

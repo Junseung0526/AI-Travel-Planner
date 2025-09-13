@@ -12,8 +12,8 @@ services:
       - ./backend:/app
     environment:
       - NODE_ENV=development
-      - OPENAI_API_KEY=${OPENAI_API_KEY} # .env 파일의 API 키를 사용합니다.
-    command: npm run start:dev
+      - GOOGLE_GEMINI_API_KEY=${GOOGLE_GEMINI_API_KEY} # .env 파일의 API 키를 사용합니다.
+    command: sh -c "npm install && npm run start:dev"
 
   frontend:
     build:
