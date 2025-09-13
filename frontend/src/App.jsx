@@ -8,7 +8,6 @@ function App() {
     const [itinerary, setItinerary] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const DEV = process.env.DEV_API_URL;
 
     const handlePlanSubmit = async (planData) => {
         setLoading(true);
@@ -16,7 +15,7 @@ function App() {
         setItinerary(null);
 
         try {
-            const response = await fetch(`${DEV}/api/travel/plan`, {
+            const response = await fetch(`http://localhost:3000/api/travel/plan`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
