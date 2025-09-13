@@ -14,18 +14,18 @@ export class TravelService {
     }
 
     async generateTravelPlan(destination: string, duration: string, interests: string): Promise<any> {
-        const model = this.genAI.getGenerativeModel({ model: 'gemini-pro' });
+        const model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
 
         const prompt = `
       당신은 여행 플래너 전문가입니다.
       사용자의 입력에 따라 JSON 형식으로 상세한 여행 일정을 만들어 주세요.
       JSON 외에 다른 텍스트는 절대로 포함하지 마세요.
-      
+
       사용자 요청:
       - 목적지: ${destination}
       - 기간: ${duration}
       - 관심사: ${interests}
-      
+
       JSON 객체는 다음 스키마를 반드시 따라야 합니다.
       {
         "tripTitle": "여행에 대한 개인화된 제목",
@@ -43,7 +43,7 @@ export class TravelService {
           }
         ]
       }
-      
+
       최종 응답은 올바른 형식의 JSON 객체여야 합니다.
     `;
 
