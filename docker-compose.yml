@@ -10,10 +10,12 @@ services:
       - "3000:3000"
     volumes:
       - ./backend:/app
+    env_file:
+      - .env
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - GOOGLE_GEMINI_API_KEY=${GOOGLE_GEMINI_API_KEY} # .env 파일의 API 키를 사용합니다.
-    command: sh -c "npm install && npm run start:dev"
+    command: npm run start:prod
 
   frontend:
     build:

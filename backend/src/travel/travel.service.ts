@@ -15,6 +15,8 @@ export class TravelService {
 
     async generateTravelPlan(destination: string, duration: string, interests: string): Promise<any> {
         const model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
+        const MAX_RETRIES = 3;
+        const BASE_DELAY_MS = 1000; // 1초
 
         const prompt = `
       당신은 여행 플래너 전문가입니다.
@@ -47,43 +49,54 @@ export class TravelService {
       최종 응답은 올바른 형식의 JSON 객체여야 합니다.
     `;
 
-        try {
-            const result = await model.generateContent({
-                contents: [{ role: 'user', parts: [{ text: prompt }] }],
-                safetySettings: [
-                    {
-                        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-                        threshold: HarmBlockThreshold.BLOCK_NONE,
-                    },
-                    {
-                        category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-                        threshold: HarmBlockThreshold.BLOCK_NONE,
-                    },
-                    {
-                        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-                        threshold: HarmBlockThreshold.BLOCK_NONE,
-                    },
-                    {
-                        category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-                        threshold: HarmBlockThreshold.BLOCK_NONE,
-                    },
-                ],
-            });
+        for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+            try {
+                const result = await model.generateContent({
+                    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                    safetySettings: [
+                        {
+                            category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                            threshold: HarmBlockThreshold.BLOCK_NONE,
+                        },
+                        {
+                            category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+                            threshold: HarmBlockThreshold.BLOCK_NONE,
+                        },
+                        {
+                            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+                            threshold: HarmBlockThreshold.BLOCK_NONE,
+                        },
+                        {
+                            category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+                            threshold: HarmBlockThreshold.BLOCK_NONE,
+                        },
+                    ],
+                });
 
-            const response = await result.response;
-            let jsonString = response.text().trim();
+                const response = await result.response;
+                let jsonString = response.text().trim();
 
-            const startJson = jsonString.indexOf('{');
-            const endJson = jsonString.lastIndexOf('}');
-            if (startJson !== -1 && endJson !== -1) {
-                jsonString = jsonString.substring(startJson, endJson + 1);
+                const startJson = jsonString.indexOf('{');
+                const endJson = jsonString.lastIndexOf('}');
+                if (startJson !== -1 && endJson !== -1) {
+                    jsonString = jsonString.substring(startJson, endJson + 1);
+                }
+
+                return JSON.parse(jsonString);
+
+            } catch (error: any) {
+                console.error(`Attempt ${attempt} failed:`, error.message);
+
+                if (attempt < MAX_RETRIES && error?.status === 503) {
+                    const delay = BASE_DELAY_MS * (2 ** (attempt - 1)) + Math.random() * 1000; // 지수적 백오프 + 지터
+                    console.log(`Retrying in ${delay / 1000} seconds...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                } else {
+                    // 재시도 한계에 도달했거나 503 오류가 아닌 경우
+                    console.error('Gemini API Error:', error);
+                    throw new InternalServerErrorException('AI로부터 여행 계획을 생성하는 데 실패했습니다.');
+                }
             }
-
-            return JSON.parse(jsonString);
-
-        } catch (error) {
-            console.error('Gemini API Error:', error);
-            throw new InternalServerErrorException('AI로부터 여행 계획을 생성하는 데 실패했습니다.');
         }
     }
 }
