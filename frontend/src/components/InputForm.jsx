@@ -52,6 +52,8 @@ const InputForm = ({ onPlanSubmit }) => {
                 </label>
             </div>
             <button type="submit">여행 계획 생성</button>
+            {/* 여기에 저작권(copyright) 정보를 추가합니다 */}
+            <p className="copyright">&copy; 2025 Gri22ly. All Rights Reserved.</p>
         </form>
     );
 };

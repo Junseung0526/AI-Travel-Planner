@@ -1,27 +1,60 @@
 :root {
-    --background-color: #1a1a1a;
-    --card-color: #2a2a2a;
-    --text-color: #e0e0e0;
-    --sub-text-color: #a0a0a0;
-    --accent-color: #64ffda; /* Tailwind CSS의 에메랄드 계열 색상 */
-    --button-hover-color: #00a880;
+    /* 따뜻하고 모험적인 색상 팔레트 */
+    --background-color: #121212;
+    --card-color: #1c1c1c; /* 더 어둡고 전문적인 카드 색상 */
+    --text-color: #f0f0f0;
+    --sub-text-color: #b0b0b0;
+    --accent-color: #ff9800; /* 따뜻한 오렌지색 */
+    --accent-dark-color: #e65100; /* 짙은 오렌지색 */
+    --button-hover-color: #ff5722;
     --border-color: #444;
-    --shadow-color: rgba(0, 0, 0, 0.4);
-    --transition-duration: 0.3s;
+    --shadow-color: rgba(0, 0, 0, 0.6);
+    --transition-duration: 0.4s;
+    --overlay-color: rgba(0, 0, 0, 0.6); /* 배경 이미지 위에 어둡게 덮는 색상 */
+    --copyright-color: #888;
 }
 
-/* 폰트 임포트 */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+/* 폰트 임포트: Noto Sans KR + Playfair Display (제목용) */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Playfair+Display:wght@700&display=swap');
 
 body {
     margin: 0;
     padding: 0;
     font-family: 'Noto Sans KR', 'Helvetica Neue', Arial, sans-serif;
-    background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
     transition: background-color var(--transition-duration), color var(--transition-duration);
-    animation: fadeIn 0.5s ease-in-out;
+
+    /* 배경 이미지 추가 */
+    background: var(--background-color); /* 기본 배경색 */
+    background-image: url('https://source.unsplash.com/random/1920x1080/?travel,adventure,landscape'); /* 랜덤 여행 이미지 */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* 스크롤해도 배경 고정 */
+    position: relative; /* 오버레이를 위해 필요 */
+    min-height: 100vh; /* 최소 높이 설정 */
+    display: flex; /* 콘텐츠를 중앙에 배치하기 위함 */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* 세로 정렬 */
+}
+
+/* 배경 이미지 위에 어두운 오버레이 추가 (텍스트 가독성 향상) */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--overlay-color);
+    z-index: -1; /* 콘텐츠 뒤에 배치 */
+    animation: fadeInOverlay 1s ease-in-out;
+}
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes fadeIn {
@@ -29,15 +62,18 @@ body {
     to { opacity: 1; }
 }
 
+/* 중앙 정렬 컨테이너 */
 .app-container {
     max-width: 800px;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: var(--card-color);
-    border-radius: 12px;
-    box-shadow: 0 10px 30px var(--shadow-color);
-    transform: translateY(20px);
-    animation: slideIn 0.5s forwards;
+    margin: 40px auto; /* 이미지 배경에 맞춰 마진 조정 */
+    padding: 40px;
+    background: rgba(28, 28, 28, 0.85); /* 카드 배경을 약간 투명하게 하여 배경 이미지가 비치도록 */
+    backdrop-filter: blur(8px); /* 블러 효과로 텍스트 가독성 향상 및 깊이감 부여 */
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 40px var(--shadow-color);
+    animation: slideIn 0.8s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 1; /* 오버레이보다 위에 오도록 */
 }
 
 @keyframes slideIn {
@@ -46,21 +82,23 @@ body {
 
 .app-header {
     text-align: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: 30px;
+    padding-bottom: 25px;
+    border-bottom: 2px solid var(--accent-dark-color);
+    margin-bottom: 40px;
 }
 
 .app-header h1 {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
     color: var(--accent-color);
-    transition: color var(--transition-duration);
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .app-header p {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: var(--sub-text-color);
 }
 
@@ -68,85 +106,106 @@ body {
 .input-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 25px;
 }
 
 .input-form label {
     display: flex;
     flex-direction: column;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 500;
     color: var(--text-color);
+    position: relative; /* 아이콘 배치를 위해 */
 }
 
+/* 아이콘을 위한 패딩 */
 .input-form input {
-    padding: 12px;
-    margin-top: 8px;
-    background-color: #333;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+    padding: 15px 15px 15px 45px; /* 왼쪽 패딩을 늘려 아이콘 공간 확보 */
+    margin-top: 10px;
+    background-color: #282828;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
     color: var(--text-color);
     font-size: 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.3s;
 }
 
 .input-form input:focus {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 5px var(--accent-color);
+    box-shadow: 0 0 8px rgba(255, 152, 0, 0.5);
 }
 
+/* 입력 필드에 아이콘 추가 (폰트 어썸 필요) */
+.input-field-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%; /* label의 중앙으로 오게 */
+    transform: translateY(-50%);
+    color: var(--sub-text-color);
+    font-size: 1.2rem;
+    pointer-events: none; /* 클릭 방지 */
+}
+
+
 .input-form button {
-    padding: 15px;
+    padding: 18px;
     background-color: var(--accent-color);
-    color: var(--background-color);
+    color: #121212;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    font-size: 1.1rem;
-    font-weight: 600;
-    transition: background-color 0.3s, transform 0.1s;
+    font-size: 1.2rem;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    display: flex; /* 아이콘과 텍스트 정렬 */
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* 아이콘과 텍스트 사이 간격 */
 }
 
 .input-form button:hover {
     background-color: var(--button-hover-color);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.03);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
 /* 일정 표시 스타일 */
 .itinerary-display {
-    margin-top: 30px;
+    margin-top: 40px;
 }
 
 .itinerary-display h2 {
-    font-size: 2rem;
+    font-size: 2.8rem;
     font-weight: 700;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     color: var(--accent-color);
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 1px;
 }
 
 .day-plan {
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    opacity: 0; /* 애니메이션을 위해 초기 투명도를 0으로 설정 */
-    animation: slideUp 0.5s forwards;
+    background: rgba(42, 42, 42, 0.8); /* 카드 배경 투명도 조정 */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    opacity: 0;
+    animation: slideUp 0.7s forwards;
     transition: box-shadow var(--transition-duration), transform var(--transition-duration);
 }
 
 .day-plan:hover {
-    box-shadow: 0 5px 15px var(--shadow-color);
-    transform: translateY(-5px);
+    box-shadow: 0 8px 20px var(--shadow-color);
+    transform: translateY(-8px);
 }
 
 @keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
@@ -155,11 +214,12 @@ body {
 }
 
 .day-plan h3 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 600;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 10px;
-    margin-bottom: 15px;
+    border-bottom: 2px solid var(--accent-dark-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    color: var(--accent-color);
 }
 
 .day-plan ul {
@@ -169,18 +229,32 @@ body {
 }
 
 .day-plan li {
-    margin-bottom: 15px;
-    padding-left: 10px;
+    margin-bottom: 20px;
+    padding-left: 15px;
     position: relative;
+    border-left: 2px solid var(--sub-text-color);
+    transition: border-left 0.3s ease;
+}
+
+.day-plan li:hover {
+    border-left: 2px solid var(--accent-color);
 }
 
 .day-plan li::before {
-    content: '•';
-    color: var(--accent-color);
-    font-size: 1.2em;
+    content: '';
     position: absolute;
-    left: -5px;
-    top: -2px;
+    left: -8px;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    transform: translateY(2px);
+    transition: background-color 0.3s ease;
+}
+
+.day-plan li:hover::before {
+    background-color: var(--button-hover-color);
 }
 
 .day-plan strong {
@@ -195,22 +269,37 @@ body {
     padding-left: 20px;
 }
 
-/* 로딩/에러 메시지 */
 .loading-message, .error-message {
     text-align: center;
     font-size: 1.2rem;
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 20px;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 25px;
     animation: fadeIn 0.5s ease-in-out;
 }
 
 .loading-message {
-    background-color: #333;
+    background-color: rgba(51, 51, 51, 0.7);
     color: var(--accent-color);
+    border: 1px solid var(--accent-dark-color);
 }
 
 .error-message {
-    background-color: #5b2121;
+    background-color: rgba(91, 33, 33, 0.7);
     color: #ffcccc;
+    border: 1px solid #ff4d4d;
+}
+
+.copyright {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--copyright-color);
+    margin-top: 30px; /* 폼과의 간격 추가 */
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color); /* 폼과 저작권 구분선 추가 */
+    transition: color 0.3s ease;
+}
+
+.copyright:hover {
+    color: var(--text-color); /* 호버 시 색상 변경 */
 }
