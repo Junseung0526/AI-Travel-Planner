@@ -1,7 +1,7 @@
 # AI 여행 플래너
 
 ### 프로젝트 소개
-개인 맞춤형 여행 일정을 생성해 주는 풀스택 웹 애플리케이션입니다. **React(Vite)** 기반의 프론트엔드와 **NestJS** 기반의 백엔드를 **Docker**로 통합하여 개발했습니다. **Google Gemini 2.5 Pro API**를 활용해 사용자의 입력에 맞는 최적의 여행 계획을 자동으로 추천해 줍니다.
+개인 맞춤형 여행 일정을 생성해 주는 풀스택 웹 애플리케이션입니다. React(Vite) 기반의 프론트엔드와 NestJS 기반의 백엔드를 Docker로 통합하여 개발했습니다. Google Gemini 2.5 Pro API를 활용해 사용자의 입력에 맞는 최적의 여행 계획을 자동으로 추천하며, 각 여행지 사진까지 함께 보여줍니다.
 
 ##
 
@@ -20,6 +20,7 @@
 - **백엔드 (Backend)**
     - `NestJS`: Node.js 기반 타입스크립트 웹 프레임워크
     - `Google Gemini API`: AI 기반 여행 일정 생성
+    - `Google Custom Search API`: 이미지 검색 및 제공
 - **개발/배포 환경**
     - `Docker`: 컨테이너화
     - `Docker Compose`: 다중 컨테이너 관리
@@ -29,10 +30,14 @@
 ### 시작하기
 
 1.  **.env 파일 설정**
-    프로젝트 최상위 디렉터리에 `.env` 파일을 만들고, 발급받은 Google Gemini API 키를 입력합니다.
+    프로젝트 최상위 디렉터리에 `.env` 파일을 만들고, 발급받은 API 키와 검색엔진 ID를 입력합니다.
 
     ```dotenv
     GOOGLE_GEMINI_API_KEY=여기에_API_키를_넣으세요
+    GOOGLE_CUSTOM_SEARCH_ENGINE_ID=여기에_검색엔진ID를_넣으세요
+    ```
+    ```bash
+    발급받은 서비스 계정 키 JSON 파일은 backend 디렉터리에 service-account.json으로 저장해야 합니다.
     ```
 
 2.  **프로젝트 실행**

@@ -16,8 +16,12 @@ const ItineraryDisplay = ({ itinerary }) => {
                         {dayPlan.activities.map((activity, activityIndex) => (
                             <li key={activityIndex}>
                                 <strong>{activity.time}</strong>: {activity.activityName}
+
                                 <p>{activity.description}</p>
                                 {activity.notes && <p className="notes">참고: {activity.notes}</p>}
+
+                                {activity.imageURL && (
+                                    <img src={activity.imageURL} alt={activity.activityName} style={{ maxWidth: '100%', height: 'auto' }} />)}
                             </li>
                         ))}
                     </ul>

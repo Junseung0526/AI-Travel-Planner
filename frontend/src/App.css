@@ -290,6 +290,13 @@ body::before {
     border: 1px solid #ff4d4d;
 }
 
+.itinerary-display img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px; /* 선택 사항 */
+    margin-top: 10px; /* 선택 사항 */
+}
+
 .copyright {
     text-align: center;
     font-size: 0.85rem;
